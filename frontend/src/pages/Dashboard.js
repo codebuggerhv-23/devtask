@@ -75,7 +75,7 @@ const Dashboard = () => {
     socket.on('task_created', (data) => setTasks(prev => [data.task, ...prev]));
     socket.on('task_status_changed', (data) => setTasks(prev => prev.map(t => t._id === data.task._id ? data.task : t)));
     socket.on('new_comment', (data) => {
-      setComments(prev => ({ ...prev, [data.taskId || taskId]: [...(prev[taskId] || []), data.comment] }));
+      setComments(prev => ({ ...prev, [data.taskId]: [...(prev[data.taskId] || []), data.comment] }));
     });
 
     return () => {
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
   const updateStatus = async (taskId, newStatus) => {
     try {
-      const res = await axios.patch(`'https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}/status`, { status: newStatus }, { headers });
+      const res = await axios.patch(`https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}/status`, { status: newStatus }, { headers });
       socket.emit('task_status_changed', { task: res.data.task, teamId: savedUser?.teamId });
       setTasks(prev => prev.map(t => t._id === taskId ? res.data.task : t));
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`'https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}`, { headers });
+      await axios.delete(`https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}`, { headers });
       setTasks(prev => prev.filter(t => t._id !== taskId));
       if (selectedTask?._id === taskId) setSelectedTask(null);
     } catch (err) { console.error(err); }
