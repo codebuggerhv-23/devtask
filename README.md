@@ -36,4 +36,4 @@ A full-stack real-time collaborative task management system with a gamified rati
 - Frontend: Vercel
 - Database: MongoDB Atlas
 
-## Architecture
+
