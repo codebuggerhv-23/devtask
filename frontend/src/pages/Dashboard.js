@@ -75,7 +75,7 @@ const Dashboard = () => {
     socket.on('task_created', (data) => setTasks(prev => [data.task, ...prev]));
     socket.on('task_status_changed', (data) => setTasks(prev => prev.map(t => t._id === data.task._id ? data.task : t)));
     socket.on('new_comment', (data) => {
-      setComments(prev => ({ ...prev, [data.taskId]: [...(prev[data.taskId] || []), data.comment] }));
+      setComments(prev => ({ ...prev, [data.taskId || taskId]: [...(prev[data.taskId || taskId] || []), data.comment] }));
     });
 
     return () => {
@@ -147,7 +147,7 @@ const Dashboard = () => {
   const addComment = (taskId) => {
     if (!comment.trim()) return;
     const newComment = { text: comment, author: savedUser?.name, time: new Date().toLocaleTimeString() };
-    setComments(prev => ({ ...prev, [taskId]: [...(prev[data.taskId] || []), newComment] }));
+    setComments(prev => ({ ...prev, [taskId]: [...(prev[data.taskId || taskId] || []), newComment] }));
     socket.emit('new_comment', { taskId, comment: newComment, teamId: savedUser?.teamId });
     setComment('');
   };
