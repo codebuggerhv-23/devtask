@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+const socket = io('https://devtask-backend-ek0x.onrender.com');
 
 const getAvatar = (name) => {
   const colors = ['#1a73e8', '#e84c1a', '#1ae86a', '#e8c21a', '#9b1ae8', '#1ae8d4'];
@@ -87,7 +87,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/tasks', { headers });
+      const res = await axios.get('https://devtask-backend-ek0x.onrender.com/api/tasks', { headers });
       setTasks(res.data.tasks);
       setStats(res.data.stats);
     } catch (err) { console.error(err); }
@@ -96,14 +96,14 @@ const Dashboard = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/profile', { headers });
+      const res = await axios.get('https://devtask-backend-ek0x.onrender.com/api/auth/profile', { headers });
       setProfile(res.data);
     } catch (err) { console.error(err); }
   };
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/leaderboard', { headers });
+      const res = await axios.get('https://devtask-backend-ek0x.onrender.com/api/auth/leaderboard', { headers });
       setLeaderboard(res.data);
     } catch (err) { console.error(err); }
   };
@@ -111,7 +111,7 @@ const Dashboard = () => {
   const createTask = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/tasks', form, { headers });
+      const res = await axios.post('https://devtask-backend-ek0x.onrender.com/api/tasks', form, { headers });
       socket.emit('task_created', { task: res.data.task, teamId: savedUser?.teamId });
       setTasks(prev => [res.data.task, ...prev]);
       setStats(prev => ({ ...prev, total: prev.total + 1, todo: prev.todo + 1 }));
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
   const updateStatus = async (taskId, newStatus) => {
     try {
-      const res = await axios.patch(`http://localhost:5000/api/tasks/${taskId}/status`, { status: newStatus }, { headers });
+      const res = await axios.patch(`'https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}/status`, { status: newStatus }, { headers });
       socket.emit('task_status_changed', { task: res.data.task, teamId: savedUser?.teamId });
       setTasks(prev => prev.map(t => t._id === taskId ? res.data.task : t));
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, { headers });
+      await axios.delete(`'https://devtask-backend-ek0x.onrender.com/api/tasks/${taskId}`, { headers });
       setTasks(prev => prev.filter(t => t._id !== taskId));
       if (selectedTask?._id === taskId) setSelectedTask(null);
     } catch (err) { console.error(err); }
